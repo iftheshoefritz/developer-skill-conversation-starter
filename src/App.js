@@ -42,6 +42,7 @@ class App extends React.Component {
         <div className="App">
           <header className="App-header">
             Developer skill conversation starter
+            <p>refresh for a new question!</p>
             <p className="App-text">{this.state.questions[this.state.questionIndex]}</p>
             <form onSubmit={this.handleFormSubmit}>
               {
