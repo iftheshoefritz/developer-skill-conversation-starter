@@ -24,6 +24,7 @@ class App extends React.Component {
     };
     this.handleOptionChange = this.handleOptionChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.chooseRandomQuestion = this.chooseRandomQuestion.bind(this);
     this.state.questionIndex = Math.floor(Math.random() * this.state.questions.length);
   }
 
@@ -42,7 +43,7 @@ class App extends React.Component {
         <div className="App">
           <header className="App-header">
             Developer skill conversation starter
-            <p>refresh for a new question!</p>
+            <button className="btn btn-default" onClick={this.chooseRandomQuestion}>New question!</button>
             <p className="App-text">{this.state.questions[this.state.questionIndex].category}: {this.state.questions[this.state.questionIndex].title}</p>
             <form onSubmit={this.handleFormSubmit}>
               {
@@ -76,6 +77,13 @@ class App extends React.Component {
     console.log('You have selected:', this.state.selectedOption);
   }
 
+  chooseRandomQuestion(clickEvent) {
+    console.log('You clicked for a new question');
+
+    this.setState(
+      {questionIndex: Math.floor(Math.random() * this.state.questions.length)}
+    )
+  }
 }
 
 export default App;
