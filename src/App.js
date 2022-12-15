@@ -20,11 +20,14 @@ class App extends React.Component {
         {id: '64d4e1957e0212963ffaa6ce19d1e05e', category: 'workflow', title: 'When I occasionally run a complicated command with many options, I can easily find the exact command I ran the previous time (e.g. from notes or from terminal history)'},
         {id: '1d8fddf24fe37b7e92b24800ec72dc74', category: 'workflow', title: 'Can manage file ownership and permissions'},
       ],
-      questionIndex: null
+      questionIndex: null,
+      answers: [
+      ],
     };
     this.handleOptionChange = this.handleOptionChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.chooseRandomQuestion = this.chooseRandomQuestion.bind(this);
+    this.getQuestionText = this.getQuestionText.bind(this);
     this.state.questionIndex = Math.floor(Math.random() * this.state.questions.length);
   }
 
@@ -59,6 +62,14 @@ class App extends React.Component {
               }
               <button className="btn btn-default" type="submit" onSubmit={this.handleFormSubmit}>Save</button>
             </form>
+            <p>Previous answers:</p>
+            <ul>
+            {
+              this.state.answers.map((answer, index) => {
+                return (<li key={index}>{this.getQuestionText(answer.questionId)}: {answer.answerId}</li>)
+              })
+            }
+            </ul>
           </header>
         </div>
     );
@@ -75,6 +86,13 @@ class App extends React.Component {
     formSubmitEvent.preventDefault();
 
     console.log('You have selected:', this.state.selectedOption);
+    console.log('Addding to: ', this.state.answers)
+
+    this.setState(previousState => (
+      {
+        answers: [...previousState.answers, {questionId: previousState.questions[previousState.questionIndex].id, answerId: previousState.selectedOption}]
+      }
+    ));
   }
 
   chooseRandomQuestion(clickEvent) {
@@ -83,6 +101,10 @@ class App extends React.Component {
     this.setState(
       {questionIndex: Math.floor(Math.random() * this.state.questions.length)}
     )
+  }
+
+  getQuestionText(questionId) {
+    return this.state.questions.filter((question) => question.id === questionId)[0].title;
   }
 }
 
