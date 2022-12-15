@@ -46,7 +46,6 @@ class App extends React.Component {
         <div className="App">
           <header className="App-header">
             Developer skill conversation starter
-            <button className="btn btn-default" onClick={this.chooseRandomQuestion}>New question!</button>
             <p className="App-text">{this.state.questions[this.state.questionIndex].category}: {this.state.questions[this.state.questionIndex].title}</p>
             <form onSubmit={this.handleFormSubmit}>
               {
@@ -60,7 +59,7 @@ class App extends React.Component {
                   )
                 })
               }
-              <button className="btn btn-default" type="submit" onSubmit={this.handleFormSubmit}>Save</button>
+              <button className="btn btn-default" type="submit" onSubmit={this.handleFormSubmit}>Next question</button>
             </form>
             <p>Previous answers:</p>
             <ul>
@@ -85,17 +84,16 @@ class App extends React.Component {
   handleFormSubmit(formSubmitEvent) {
     formSubmitEvent.preventDefault();
 
-    console.log('You have selected:', this.state.selectedOption);
-    console.log('Addding to: ', this.state.answers)
-
     this.setState(previousState => (
       {
-        answers: [...previousState.answers, {questionId: previousState.questions[previousState.questionIndex].id, answerId: previousState.selectedOption}]
+        answers: [...previousState.answers, {questionId: previousState.questions[previousState.questionIndex].id, answerId: previousState.selectedOption}],
+        selectedOption: null
       }
     ));
+    this.chooseRandomQuestion();
   }
 
-  chooseRandomQuestion(clickEvent) {
+  chooseRandomQuestion() {
     console.log('You clicked for a new question');
 
     this.setState(
