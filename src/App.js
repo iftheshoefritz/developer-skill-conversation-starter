@@ -126,7 +126,6 @@ class App extends React.Component {
   }
 
   handleOptionChange(changeEvent) {
-    console.log("option changed to:", changeEvent.target.value);
     this.setState({
       selectedOption: changeEvent.target.value
     });
