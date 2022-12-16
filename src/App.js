@@ -86,7 +86,6 @@ class App extends React.Component {
     };
     this.handleOptionChange = this.handleOptionChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.chooseRandomQuestion = this.chooseRandomQuestion.bind(this);
     this.getQuestionText = this.getQuestionText.bind(this);
     this.state.questionIndex = Math.floor(Math.random() * this.state.questions.length);
   }
@@ -150,12 +149,6 @@ class App extends React.Component {
         questionIndex: Math.floor(Math.random() * previousState.questions.length - 1)
       }
     ));
-  }
-
-  chooseRandomQuestion() {
-    this.setState(
-      {questionIndex: Math.floor(Math.random() * this.state.questions.length)}
-    )
   }
 
   getQuestionText(questionId) {
