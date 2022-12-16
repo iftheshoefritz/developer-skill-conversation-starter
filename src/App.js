@@ -7,6 +7,14 @@ class App extends React.Component {
     this.state = {
       selectedOption: null,
       answer: null,
+      options: [
+          {id: "1", title: "I did not know this was something important"},
+          {id: "2", title: "I did not know this was possible"},
+          {id: "3", title: "I need help doing this"},
+          {id: "4", title: "I do this often"},
+          {id: "5", title: "I do this often and can teach others"},
+          {id: "6", title: "I think this is undesirable"}
+      ],
       questions: [
         {id: "668e532a2324084e9a35f999442b1ddd", category: "workflow", title: "I can swap between open files in multiple repositories without having to close down a terminal or editor"},
         {id: "9d64a15c8a1ec1a6425a0399771e5a62", category: "workflow", title: "I can search for text in a configuration file anywhere on my computer from the command line, without knowing the name of the file"},
@@ -85,14 +93,6 @@ class App extends React.Component {
   }
 
   render() {
-    const options = [
-      {id: "1", title: "I did not know this was something important"},
-      {id: "2", title: "I did not know this was possible"},
-      {id: "3", title: "I need help doing this"},
-      {id: "4", title: "I do this often"},
-      {id: "5", title: "I do this often and can teach others"},
-      {id: "6", title: "I think this is undesirable"}
-    ];
 
 
     return (
@@ -102,11 +102,11 @@ class App extends React.Component {
             <p className="App-text">{this.state.questions[this.state.questionIndex].category}: {this.state.questions[this.state.questionIndex].title}</p>
             <form onSubmit={this.handleFormSubmit}>
               {
-                options.map((option, i) => {
+                this.state.options.map((option, i) => {
                   return (
                       <div className="radio" key={i}>
                       <label>
-                      <input type="radio" value={options[i].id} checked={this.state.selectedOption === options[i].id} onChange={this.handleOptionChange.bind(this)} />{options[i].title}
+                      <input type="radio" value={this.state.options[i].id} checked={this.state.selectedOption === this.state.options[i].id} onChange={this.handleOptionChange.bind(this)} />{this.state.options[i].title}
                       </label>
                     </div>
                   )
@@ -118,7 +118,7 @@ class App extends React.Component {
             <ul>
             {
               this.state.answers.map((answer, index) => {
-                return (<li key={index}>{this.getQuestionText(answer.questionId)}: {answer.answerId}</li>)
+                return (<li key={index}>{this.getQuestionText(answer.question.id)}: {answer.answer.title}</li>)
               })
             }
             </ul>
@@ -139,7 +139,13 @@ class App extends React.Component {
 
     this.setState(previousState => (
       {
-        answers: [...previousState.answers, {questionId: previousState.questions[previousState.questionIndex].id, answerId: previousState.selectedOption}],
+        answers: [
+          ...previousState.answers,
+          {
+            question: previousState.questions[previousState.questionIndex],
+            answer: previousState.options[previousState.selectedOption]
+          }
+        ],
         selectedOption: null
       }
     ));
