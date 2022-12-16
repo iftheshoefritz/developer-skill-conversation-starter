@@ -6,7 +6,6 @@ class App extends React.Component {
     super(props);
     this.state = {
       selectedOption: null,
-      answer: null,
       options: [
           {id: "1", title: "I did not know this was something important"},
           {id: "2", title: "I did not know this was possible"},
@@ -118,7 +117,7 @@ class App extends React.Component {
             <ul>
             {
               this.state.answers.map((answer, index) => {
-                return (<li key={index}>{this.getQuestionText(answer.question.id)}: {answer.answer.title}</li>)
+                return (<li key={index}>{answer.question.title}: {answer.answer.title}</li>)
               })
             }
             </ul>
@@ -139,6 +138,7 @@ class App extends React.Component {
 
     this.setState(previousState => (
       {
+        questions: previousState.questions.filter(q => q.id !== previousState.questions[previousState.questionIndex].id),
         answers: [
           ...previousState.answers,
           {
@@ -146,22 +146,20 @@ class App extends React.Component {
             answer: previousState.options[previousState.selectedOption]
           }
         ],
-        selectedOption: null
+        selectedOption: null,
+        questionIndex: Math.floor(Math.random() * previousState.questions.length - 1)
       }
     ));
-    this.chooseRandomQuestion();
   }
 
   chooseRandomQuestion() {
-    console.log('You clicked for a new question');
-
     this.setState(
       {questionIndex: Math.floor(Math.random() * this.state.questions.length)}
     )
   }
 
   getQuestionText(questionId) {
-    return this.state.questions.filter((question) => question.id === questionId)[0].title;
+    return this.state.questions.filter((question) => question.id === questionId)[0].id;
   }
 }
 
