@@ -4,6 +4,11 @@ import React from 'react';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.handleOptionChange = this.handleOptionChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.getQuestionText = this.getQuestionText.bind(this);
+    this.saveToLocalStorage = this.saveToLocalStorage.bind(this);
+
     this.state = {
       selectedOption: null,
       options: [
@@ -14,7 +19,7 @@ class App extends React.Component {
           {id: "5", title: "I do this often and can teach others"},
           {id: "6", title: "I think this is undesirable"}
       ],
-      questions: [
+      questions: JSON.parse(localStorage.getItem('dscs-questions')) ?? [
         {id: "668e532a2324084e9a35f999442b1ddd", category: "workflow", title: "I can swap between open files in multiple repositories without having to close down a terminal or editor"},
         {id: "9d64a15c8a1ec1a6425a0399771e5a62", category: "workflow", title: "I can search for text in a configuration file anywhere on my computer from the command line, without knowing the name of the file"},
         {id: "feb6c5c7a9dd209caf36d0594357eccb", category: "workflow", title: "I can search for a line of code in a specific project or directory"},
@@ -81,12 +86,8 @@ class App extends React.Component {
         {id: "4b6124f7354d4eadd42f5ec6171d961", category: "architecture", title: "I can draw a diagram to describe the interactions between pieces of code (e.g. objects, functions) to help myself and others understand and make decisions"},
       ],
       questionIndex: null,
-      answers: [
-      ],
+      answers: JSON.parse(localStorage.getItem('dscs-answers')) ?? [],
     };
-    this.handleOptionChange = this.handleOptionChange.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.getQuestionText = this.getQuestionText.bind(this);
     this.state.questionIndex = Math.floor(Math.random() * this.state.questions.length);
   }
 
@@ -97,20 +98,22 @@ class App extends React.Component {
         <div className="App">
           <header className="App-header">
             Developer skill conversation starter
-            <p className="App-text">{this.state.questions[this.state.questionIndex].category}: {this.state.questions[this.state.questionIndex].title}</p>
+          </header>
+          <div className="App-content">
+            <p>{this.state.questions[this.state.questionIndex].category}: {this.state.questions[this.state.questionIndex].title}</p>
             <form onSubmit={this.handleFormSubmit}>
-              {
-                this.state.options.map((option, i) => {
-                  return (
-                      <div className="radio" key={i}>
-                      <label>
-                      <input type="radio" value={this.state.options[i].id} checked={this.state.selectedOption === this.state.options[i].id} onChange={this.handleOptionChange.bind(this)} />{this.state.options[i].title}
-                      </label>
+            {
+              this.state.options.map((option, i) => {
+                return (
+                    <div className="radio" key={i}>
+                    <label>
+                    <input type="radio" value={this.state.options[i].id} checked={this.state.selectedOption === this.state.options[i].id} onChange={this.handleOptionChange.bind(this)} />{this.state.options[i].title}
+                  </label>
                     </div>
-                  )
-                })
-              }
-              <button className="btn btn-default" type="submit" onSubmit={this.handleFormSubmit}>Next question</button>
+                )
+              })
+            }
+            <button className="btn btn-default" type="submit" onSubmit={this.handleFormSubmit}>Next question</button>
             </form>
             <p>Previous answers:</p>
             <ul>
@@ -120,7 +123,7 @@ class App extends React.Component {
               })
             }
             </ul>
-          </header>
+          </div>
         </div>
     );
   }
@@ -147,11 +150,16 @@ class App extends React.Component {
         selectedOption: null,
         questionIndex: Math.floor(Math.random() * previousState.questions.length - 1)
       }
-    ));
+    ), this.saveToLocalStorage);
   }
 
   getQuestionText(questionId) {
     return this.state.questions.filter((question) => question.id === questionId)[0].id;
+  }
+
+  saveToLocalStorage() {
+    localStorage.setItem('dscs-questions', JSON.stringify(this.state.questions));
+    localStorage.setItem('dscs-answers', JSON.stringify(this.state.answers));
   }
 }
 
