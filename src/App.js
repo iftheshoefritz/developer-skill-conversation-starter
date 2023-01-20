@@ -1,5 +1,6 @@
 import './App.css';
 import React from 'react';
+import { CSVLink } from 'react-csv'
 
 class App extends React.Component {
   constructor(props) {
@@ -8,6 +9,7 @@ class App extends React.Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.getQuestionText = this.getQuestionText.bind(this);
     this.saveToLocalStorage = this.saveToLocalStorage.bind(this);
+    this.downloadAnswers = this.downloadAnswers.bind(this);
 
     this.state = {
       selectedOption: null,
@@ -124,7 +126,8 @@ class App extends React.Component {
               })
             }
             </ul>
-          </div>
+            <CSVLink filename="dscs.csv" data={this.downloadAnswers()}>Export all answers</CSVLink>
+         </div>
         </div>
     );
   }
@@ -161,6 +164,21 @@ class App extends React.Component {
   saveToLocalStorage() {
     localStorage.setItem('dscs-questions', JSON.stringify(this.state.questions));
     localStorage.setItem('dscs-answers', JSON.stringify(this.state.answers));
+  }
+
+  downloadAnswers() {
+    const header = ['question.id', 'question.category', 'question.title', 'answer.id', 'answer.title']
+    return [header].concat(
+      this.state.answers.map(data =>
+        [
+          data.question.id,
+          data.question.category,
+          data.question.title,
+          data.answer.id,
+          data.answer.title
+        ]
+      )
+    )
   }
 }
 
