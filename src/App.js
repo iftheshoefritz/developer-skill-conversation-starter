@@ -12,12 +12,12 @@ class App extends React.Component {
     this.state = {
       selectedOption: null,
       options: [
-          {id: "1", title: "I did not know this was something important"},
-          {id: "2", title: "I did not know this was possible"},
-          {id: "3", title: "I need help doing this"},
-          {id: "4", title: "I do this often"},
-          {id: "5", title: "I do this often and can teach others"},
-          {id: "6", title: "I think this is undesirable"}
+          {id: "0", title: "I did not know this was something important"},
+          {id: "1", title: "I did not know this was possible"},
+          {id: "2", title: "I need help doing this"},
+          {id: "3", title: "I do this often"},
+          {id: "4", title: "I do this often and can teach others"},
+          {id: "5", title: "I think this is undesirable"}
       ],
       questions: JSON.parse(localStorage.getItem('dscs-questions')) ?? [
         {id: "668e532a2324084e9a35f999442b1ddd", category: "workflow", title: "I can swap between open files in multiple repositories without having to close down a terminal or editor"},
